@@ -146,8 +146,8 @@ if __name__ == "__main__":
     economy_data = get_economy_news(existing_links)
     all_data.extend(economy_data)
     
-    # 2. Stock News (Page 1 & 2)
-    for page in range(1, 3):
+    # 2. Stock News (Page 1 to 5)
+    for page in range(1, 6):
         stock_data = get_stock_news(page, existing_links)
         all_data.extend(stock_data)
         
