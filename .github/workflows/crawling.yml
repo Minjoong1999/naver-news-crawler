@@ -28,3 +28,16 @@ jobs:
     - name: Run crawler
       run: |
         python inspect_naver.py
+
+    - name: Commit and Push results
+      run: |
+        git config --global user.name "GitHub Action Bot"
+        git config --global user.email "action@github.com"
+        git add news_data.csv
+        # Check if there are changes to commit
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update news data: $(date +'%Y-%m-%d')"
+          git push
+        fi
