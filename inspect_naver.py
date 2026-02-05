@@ -2,12 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 }
+
+def get_korean_time():
+    """Returns current time in KST (UTC+9)"""
+    return (datetime.utcnow() + timedelta(hours=9)).strftime('%Y-%m-%d %H:%M:%S')
 
 def load_existing_links():
     """Load existing news links from the CSV file to prevent duplicates."""
@@ -84,7 +88,7 @@ def get_economy_news(existing_links):
             content = get_article_content(link)
             
             results.append([
-                datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                get_korean_time(),
                 'Economy',
                 title,
                 content,
@@ -124,7 +128,7 @@ def get_stock_news(page=1, existing_links=set()):
             content = get_article_content(link)
             
             results.append([
-                datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                get_korean_time(),
                 'Stock',
                 title,
                 content,
