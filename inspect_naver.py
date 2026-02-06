@@ -4,6 +4,7 @@ import csv
 import os
 from datetime import datetime, timedelta
 import time
+import re
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -33,6 +34,15 @@ def get_article_content(url):
         time.sleep(0.5) # Be polite
         response = requests.get(url, headers=headers)
         response.raise_for_status()
+        
+        # Check for JS redirect
+        if "top.location.href" in response.text:
+            match = re.search(r"top\.location\.href='(.*?)';", response.text)
+            if match:
+                new_url = match.group(1)
+                # print(f"  -> Redirecting to: {new_url}") # Optional logging
+                return get_article_content(new_url)
+
         soup = BeautifulSoup(response.text, 'html.parser')
         
         # Try common content selectors
